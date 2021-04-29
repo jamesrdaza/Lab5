@@ -7,6 +7,10 @@ var ctx = canvas.getContext('2d');
 
 const imgInput = document.getElementById("image-input")
 
+const clearBtn = document.querySelector("[type='reset']");
+const readBtn = document.querySelector("[type='button']");
+const submitBtn = document.querySelector("[type='submit']");
+
 //var submit = document.querySelector("[type='submit']");
 
 // Fires whenever the img object loads a new image (such as with img.src =)
@@ -48,7 +52,17 @@ function generateText(event) {
   ctx.fillText(txtTop, 0, 10); // FIX ME
   ctx.fillText(txtBtm, 0, 100); // FIX ME
   event.preventDefault();
+
+  // toggle buttons
+  clearBtn.disabled = false;
+  readBtn.disabled = false;
+  submitBtn.disabled = true;
 }
+
+// button: clear
+clearBtn.addEventListener('click', event => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+});
 
 /**
  * Takes in the dimensions of the canvas and the new image, then calculates the new
