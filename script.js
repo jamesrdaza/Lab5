@@ -121,6 +121,7 @@ function populateVoiceList() {
 }
 
 voiceSelector.disabled = false;
+voiceSelector.remove(0);
 populateVoiceList();
 if (speechSynthesis.onvoiceschanged !== undefined) {
   speechSynthesis.onvoiceschanged = populateVoiceList;
