@@ -10,6 +10,7 @@ const imgInput = document.getElementById("image-input")
 const clearBtn = document.querySelector("[type='reset']");
 const readBtn = document.querySelector("[type='button']");
 const submitBtn = document.querySelector("[type='submit']");
+const volumeSlider = document.querySelector("[type='range']");
 
 //var submit = document.querySelector("[type='submit']");
 
@@ -63,6 +64,85 @@ function generateText(event) {
 clearBtn.addEventListener('click', event => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
+
+// input: image-input
+imgInput.addEventListener('change', updateImageDisplay);
+
+function updateImageDisplay() {
+  var file = imgInput.files[0]; // FIX LATER
+  img.src = URL.createObjectURL(file);
+  img.alt = file.name;
+
+  canvas.appendChild(img);
+}
+
+// form: submit
+const form = document.getElementById('generate-meme');
+form.addEventListener('submit', generateText);
+
+function generateText(event) {
+  var txtTop = document.getElementById('text-top').value;
+  var txtBtm = document.getElementById('text-bottom').value;
+  console.log(txtTop);
+  console.log(txtBtm);
+  ctx.font = 'bold 36px sans-serif';
+  ctx.textAlign = "center";
+  ctx.fillStyle = 'rgb(255, 255, 255)';
+  ctx.fillText(txtTop, canvas.width/2, 40); // FIX ME
+  ctx.fillText(txtBtm, canvas.width/2, 350); // FIX ME
+  ctx.fillStyle = 'rgb(0, 0, 0)';
+  ctx.lineWidth = 2;
+  ctx.strokeText(txtTop, canvas.width/2, 40);
+  ctx.strokeText(txtBtm, canvas.width/2, 350);
+  event.preventDefault();
+
+  // toggle buttons
+  clearBtn.disabled = false;
+  readBtn.disabled = false;
+  submitBtn.disabled = true;
+}
+
+// button: clear
+clearBtn.addEventListener('click', event => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // toggle buttons
+  clearBtn.disabled = true;
+  readBtn.disabled = true;
+  submitBtn.disabled = false;
+});
+
+// button: read text
+var utterance = new SpeechSynthesisUtterance();
+readBtn.addEventListener('click', event => {
+  var txtTop = document.getElementById('text-top').value;
+  var txtBtm = document.getElementById('text-bottom').value;
+  //var utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
+  // change volume based on slider -- FIX ME CHECK IF PLACEMENT IS OK
+  utterance.volume = volumeSlider.value * 0.01;
+  utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
+  speechSynthesis.speak(utterance);
+});
+
+// div: volume-group
+volumeSlider.addEventListener('input', updateVolume);
+
+function updateVolume() {
+  const volumeIcon = document.getElementById("volume-group").querySelector('img');
+  var level = volumeSlider.value;
+  if (level >= 67 && level <= 100 ) {
+    volumeIcon.src = "icons/volume-level-3.svg";
+  }
+  else if (level >= 34 && level <= 66) {
+    volumeIcon.src = "icons/volume-level-2.svg";
+  }
+  else if (level >= 1 && level <= 33) {
+    volumeIcon.src = "icons/volume-level-1.svg";
+  }
+  else {
+    volumeIcon.src = "icons/volume-level-0.svg";
+  }
+}
 
 /**
  * Takes in the dimensions of the canvas and the new image, then calculates the new
