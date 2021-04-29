@@ -85,17 +85,25 @@ readBtn.addEventListener('click', event => {
   var txtTop = document.getElementById('text-top').value;
   var txtBtm = document.getElementById('text-bottom').value;
   //var utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
+  utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
   // change volume based on slider -- FIX ME CHECK IF PLACEMENT IS OK
   utterance.volume = volumeSlider.value * 0.01;
-  utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
+  // get voice
+  var selectedOption = voiceSelector.selectedOptions[0].getAttribute('data-name');
+  for(var i = 0; i < voices.length ; i++) {
+    if(voices[i].name === selectedOption) {
+      utterance.voice = voices[i];
+    }
+  }
+  // speak
   speechSynthesis.speak(utterance);
 });
 
 var voices = [];
+var synth = window.speechSynthesis;
 
 // get all voices
 function populateVoiceList() {
-  var synth = window.speechSynthesis;
   voices = synth.getVoices();
 
   for(var i = 0; i < voices.length ; i++) {
@@ -114,7 +122,9 @@ function populateVoiceList() {
 
 voiceSelector.disabled = false;
 populateVoiceList();
-//voiceSelector.add(populateVoiceList);
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}
 
 // div: volume-group
 volumeSlider.addEventListener('input', updateVolume);
