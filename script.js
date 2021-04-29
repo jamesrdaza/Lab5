@@ -50,8 +50,15 @@ function generateText(event) {
   var txtBtm = document.getElementById('text-bottom').value;
   console.log(txtTop);
   console.log(txtBtm);
-  ctx.fillText(txtTop, 0, 10); // FIX ME
-  ctx.fillText(txtBtm, 0, 100); // FIX ME
+  ctx.font = 'bold 36px sans-serif';
+  ctx.textAlign = "center";
+  ctx.fillStyle = 'rgb(255, 255, 255)';
+  ctx.fillText(txtTop, canvas.width/2, 40); // FIX ME
+  ctx.fillText(txtBtm, canvas.width/2, 350); // FIX ME
+  ctx.fillStyle = 'rgb(0, 0, 0)';
+  ctx.lineWidth = 2;
+  ctx.strokeText(txtTop, canvas.width/2, 40);
+  ctx.strokeText(txtBtm, canvas.width/2, 350);
   event.preventDefault();
 
   // toggle buttons
