@@ -6,8 +6,8 @@
 
 ## Part 1:
 
-LINK TO YOUR PUBLISHED SITE
+https://jamesrdaza.github.io/Lab5/
 
 ## Part 2:
 
-LINK TO YOUR PART 2 REPOSITORY
+https://github.com/mandatran/github-actions-for-ci/issues/7
