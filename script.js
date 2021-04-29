@@ -11,9 +11,7 @@ const clearBtn = document.querySelector("[type='reset']");
 const readBtn = document.querySelector("[type='button']");
 const submitBtn = document.querySelector("[type='submit']");
 const volumeSlider = document.querySelector("[type='range']");
-
 const voiceSelector = document.querySelector('select');
-
 //var submit = document.querySelector("[type='submit']");
 
 // Fires whenever the img object loads a new image (such as with img.src =)
@@ -61,6 +59,7 @@ function generateText(event) {
   ctx.lineWidth = 2;
   ctx.strokeText(txtTop, canvas.width/2, 40);
   ctx.strokeText(txtBtm, canvas.width/2, 350);
+
   event.preventDefault();
 
   // toggle buttons
@@ -72,6 +71,7 @@ function generateText(event) {
 // button: clear
 clearBtn.addEventListener('click', event => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
   // toggle buttons
   clearBtn.disabled = true;
@@ -115,7 +115,6 @@ function populateVoiceList() {
 voiceSelector.disabled = false;
 populateVoiceList();
 //voiceSelector.add(populateVoiceList);
-
 // div: volume-group
 volumeSlider.addEventListener('input', updateVolume);
 
