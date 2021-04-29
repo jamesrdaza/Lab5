@@ -2,14 +2,66 @@
 
 const img = new Image(); // used to load image from <input> and draw to canvas
 
+const canvas = document.getElementById("user-image");
+var ctx = canvas.getContext('2d');
+
+const imgInput = document.getElementById("image-input")
+
+const clearBtn = document.querySelector("[type='reset']");
+const readBtn = document.querySelector("[type='button']");
+const submitBtn = document.querySelector("[type='submit']");
+
+//var submit = document.querySelector("[type='submit']");
+
 // Fires whenever the img object loads a new image (such as with img.src =)
 img.addEventListener('load', () => {
   // TODO
 
   // Some helpful tips:
   // - Fill the whole Canvas with black first to add borders on non-square images, then draw on top
+  ctx.fillStyle = 'rgb(0, 0, 0)';
+  ctx.fillRect(0, 0, 400, 400);
   // - Clear the form when a new image is selected
   // - If you draw the image to canvas here, it will update as soon as a new image is selected
+
+  // Draw the image
+  let dim = getDimmensions(400, 400, img.width, img.height);
+  ctx.drawImage(img, dim.startX, dim.startY, dim.width, dim.height);
+});
+
+// input: image-input
+imgInput.addEventListener('change', updateImageDisplay);
+
+function updateImageDisplay() {
+  var file = imgInput.files[0]; // FIX LATER
+  img.src = URL.createObjectURL(file);
+  img.alt = file.name;
+
+  canvas.appendChild(img);
+}
+
+// form: submit
+const form = document.getElementById('generate-meme');
+form.addEventListener('submit', generateText);
+
+function generateText(event) {
+  var txtTop = document.getElementById('text-top').value;
+  var txtBtm = document.getElementById('text-bottom').value;
+  console.log(txtTop);
+  console.log(txtBtm);
+  ctx.fillText(txtTop, 0, 10); // FIX ME
+  ctx.fillText(txtBtm, 0, 100); // FIX ME
+  event.preventDefault();
+
+  // toggle buttons
+  clearBtn.disabled = false;
+  readBtn.disabled = false;
+  submitBtn.disabled = true;
+}
+
+// button: clear
+clearBtn.addEventListener('click', event => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 });
 
 /**
