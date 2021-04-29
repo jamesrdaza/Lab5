@@ -12,6 +12,8 @@ const readBtn = document.querySelector("[type='button']");
 const submitBtn = document.querySelector("[type='submit']");
 const volumeSlider = document.querySelector("[type='range']");
 
+const voiceSelector = document.querySelector('select');
+
 //var submit = document.querySelector("[type='submit']");
 
 // Fires whenever the img object loads a new image (such as with img.src =)
@@ -88,6 +90,31 @@ readBtn.addEventListener('click', event => {
   utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
   speechSynthesis.speak(utterance);
 });
+
+var voices = [];
+
+// get all voices
+function populateVoiceList() {
+  var synth = window.speechSynthesis;
+  voices = synth.getVoices();
+
+  for(var i = 0; i < voices.length ; i++) {
+    var option = document.createElement('option');
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+    if(voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
+
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
+    voiceSelector.appendChild(option);
+  }
+}
+
+voiceSelector.disabled = false;
+populateVoiceList();
+//voiceSelector.add(populateVoiceList);
 
 // div: volume-group
 volumeSlider.addEventListener('input', updateVolume);
