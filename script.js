@@ -11,7 +11,7 @@ const clearBtn = document.querySelector("[type='reset']");
 const readBtn = document.querySelector("[type='button']");
 const submitBtn = document.querySelector("[type='submit']");
 const volumeSlider = document.querySelector("[type='range']");
-
+const voiceSelector = document.querySelector('select');
 //var submit = document.querySelector("[type='submit']");
 
 // Fires whenever the img object loads a new image (such as with img.src =)
@@ -50,41 +50,6 @@ function generateText(event) {
   var txtBtm = document.getElementById('text-bottom').value;
   console.log(txtTop);
   console.log(txtBtm);
-  ctx.fillText(txtTop, 0, 10); // FIX ME
-  ctx.fillText(txtBtm, 0, 100); // FIX ME
-  event.preventDefault();
-
-  // toggle buttons
-  clearBtn.disabled = false;
-  readBtn.disabled = false;
-  submitBtn.disabled = true;
-}
-
-// button: clear
-clearBtn.addEventListener('click', event => {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-});
-
-// input: image-input
-imgInput.addEventListener('change', updateImageDisplay);
-
-function updateImageDisplay() {
-  var file = imgInput.files[0]; // FIX LATER
-  img.src = URL.createObjectURL(file);
-  img.alt = file.name;
-
-  canvas.appendChild(img);
-}
-
-// form: submit
-const form = document.getElementById('generate-meme');
-form.addEventListener('submit', generateText);
-
-function generateText(event) {
-  var txtTop = document.getElementById('text-top').value;
-  var txtBtm = document.getElementById('text-bottom').value;
-  console.log(txtTop);
-  console.log(txtBtm);
   ctx.font = 'bold 36px sans-serif';
   ctx.textAlign = "center";
   ctx.fillStyle = 'rgb(255, 255, 255)';
@@ -94,6 +59,7 @@ function generateText(event) {
   ctx.lineWidth = 2;
   ctx.strokeText(txtTop, canvas.width/2, 40);
   ctx.strokeText(txtBtm, canvas.width/2, 350);
+
   event.preventDefault();
 
   // toggle buttons
@@ -105,6 +71,7 @@ function generateText(event) {
 // button: clear
 clearBtn.addEventListener('click', event => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 
   // toggle buttons
   clearBtn.disabled = true;
@@ -124,6 +91,30 @@ readBtn.addEventListener('click', event => {
   speechSynthesis.speak(utterance);
 });
 
+var voices = [];
+
+// get all voices
+function populateVoiceList() {
+  var synth = window.speechSynthesis;
+  voices = synth.getVoices();
+
+  for(var i = 0; i < voices.length ; i++) {
+    var option = document.createElement('option');
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+
+    if(voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
+
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
+    voiceSelector.appendChild(option);
+  }
+}
+
+voiceSelector.disabled = false;
+populateVoiceList();
+//voiceSelector.add(populateVoiceList);
 // div: volume-group
 volumeSlider.addEventListener('input', updateVolume);
 
