@@ -10,6 +10,7 @@ const imgInput = document.getElementById("image-input")
 const clearBtn = document.querySelector("[type='reset']");
 const readBtn = document.querySelector("[type='button']");
 const submitBtn = document.querySelector("[type='submit']");
+const volumeSlider = document.querySelector("[type='range']");
 
 //var submit = document.querySelector("[type='submit']");
 
@@ -62,7 +63,44 @@ function generateText(event) {
 // button: clear
 clearBtn.addEventListener('click', event => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // toggle buttons
+  clearBtn.disabled = true;
+  readBtn.disabled = true;
+  submitBtn.disabled = false;
 });
+
+// button: read text
+var utterance = new SpeechSynthesisUtterance();
+readBtn.addEventListener('click', event => {
+  var txtTop = document.getElementById('text-top').value;
+  var txtBtm = document.getElementById('text-bottom').value;
+  //var utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
+  // change volume based on slider -- FIX ME CHECK IF PLACEMENT IS OK
+  utterance.volume = volumeSlider.value * 0.01;
+  utterance = new SpeechSynthesisUtterance(txtTop + " " + txtBtm);
+  speechSynthesis.speak(utterance);
+});
+
+// div: volume-group
+volumeSlider.addEventListener('input', updateVolume);
+
+function updateVolume() {
+  const volumeIcon = document.getElementById("volume-group").querySelector('img');
+  var level = volumeSlider.value;
+  if (level >= 67 && level <= 100 ) {
+    volumeIcon.src = "icons/volume-level-3.svg";
+  }
+  else if (level >= 34 && level <= 66) {
+    volumeIcon.src = "icons/volume-level-2.svg";
+  }
+  else if (level >= 1 && level <= 33) {
+    volumeIcon.src = "icons/volume-level-1.svg";
+  }
+  else {
+    volumeIcon.src = "icons/volume-level-0.svg";
+  }
+}
 
 /**
  * Takes in the dimensions of the canvas and the new image, then calculates the new
